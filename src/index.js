@@ -47,18 +47,43 @@ const dataController = (() => {
 
   loadProjects();
 
-  return { getProjects, getActiveProject, createProject };
+  return { getProjects, getActiveProject, createProject, createTask };
 })();
 
 const inputController = (() => {
   const addProjectInput = document.querySelector("[data-new-project-input]");
   const addProjectBtn = document.querySelector("[data-new-project-btn]");
 
+  const taskTitleInput = document.querySelector("[data-task-title-input]");
+  const taskDescriptionInput = document.querySelector(
+    "[data-task-description-input]"
+  );
+  const taskDateInput = document.querySelector("[data-task-date-input]");
+  const taskPriorityInput = document.querySelector(
+    "[data-task-priority-input]"
+  );
+  const addTaskBtn = document.querySelector("[data-new-task-btn]");
+
   addProjectBtn.addEventListener("click", () => {
     if (addProjectInput.value === "") return;
     dataController.createProject(addProjectInput.value);
     addProjectInput.value = "";
     displayController.renderProjectList();
+  });
+
+  addTaskBtn.addEventListener("click", () => {
+    if (taskTitleInput.value === "") return;
+    dataController.createTask(
+      taskTitleInput.value,
+      taskDescriptionInput.value,
+      taskDateInput.value,
+      taskPriorityInput.value
+    );
+    taskTitleInput.value = "";
+    taskDescriptionInput.value = "";
+    taskDateInput.value = "";
+    taskPriorityInput.value = "";
+    displayController.renderTasks();
   });
 })();
 
@@ -88,8 +113,21 @@ const displayController = (() => {
     activeProjectSpan.textContent = activeProject.title;
   };
 
+  const renderTasks = () => {
+    const activeProject = dataController.getActiveProject();
+    const activeTasks = activeProject.tasks;
+    const taskListDiv = document.getElementById("task-list");
+    clearElement(taskListDiv);
+    activeTasks.forEach((task) => {
+      let newDiv = document.createElement("div");
+      newDiv.textContent = task.title;
+      taskListDiv.append(newDiv);
+    });
+  };
+
   renderProjectList();
   renderActiveProject();
+  renderTasks();
 
-  return { renderProjectList, renderActiveProject };
+  return { renderProjectList, renderActiveProject, renderTasks };
 })();
