@@ -1,4 +1,5 @@
 import uniqid from "uniqid";
+import "./style.css";
 
 const Task = (title, description, dueDate, priority) => {
   let id = uniqid();
@@ -104,7 +105,6 @@ const inputController = (() => {
     btn.addEventListener("click", (e) => {
       dataController.deleteProject(e.target.dataset.projectId);
     });
-    
   };
 
   return { initDeleteBtn };
@@ -130,6 +130,9 @@ const displayController = (() => {
       deleteBtn.textContent = "X";
       deleteBtn.dataset.projectId = project.id;
       inputController.initDeleteBtn(deleteBtn);
+
+      titleDiv.classList.add("project-link");
+      newDiv.classList.add("project-item")
 
       newDiv.append(titleDiv);
       newDiv.append(deleteBtn);

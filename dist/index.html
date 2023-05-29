@@ -5,25 +5,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To-Do List</title>
-    <script src="main.js" defer></script>
+    <script src="bundle.js" defer></script>
   </head>
   <body>
-    <div id="project-list"></div>
-    <input type="text" data-new-project-input />
-    <button data-new-project-btn>Add Project</button>
-    <hr>
-    <h2>Active Project: <span data-active-project-title></span></h2>
-    <div id="task-list"></div>
-    <hr>
-    <h3>Add New Task:</h3>
-    <label>Title: </label>
-    <input type="text" data-task-title-input/><br>
-    <label>Description: </label>
-    <input type="text" data-task-description-input/><br>
-    <label>Due Date: </label>
-    <input type="text" data-task-date-input/><br>
-    <label>Priority: </label>
-    <input type="text" data-task-priority-input/><br>
-    <button data-new-task-btn>Add Task</button>
+    <div class="main-container">
+      <div class="header">
+        <h1>Things To Do...</h1>
+      </div>
+      <div class="sidebar">
+        <div id="project-list"></div>
+        <hr />
+        <input type="text" data-new-project-input />
+        <button data-new-project-btn>Add Project</button>
+      </div>
+      <div class="content">
+        <h2><span data-active-project-title></span></h2>
+        <div id="task-list"></div>
+        <hr />
+        <div class="new-task-form">
+          <h3>Add New Task:</h3>
+          <hr />
+          <div class="new-task-line">
+            <label>Title: </label>
+            <input type="text" data-task-title-input />
+          </div>
+
+          <div class="new-task-line">
+            <label>Description: </label>
+            <input type="text" data-task-description-input />
+          </div>
+
+          <div class="new-task-line">
+            <label>Due Date: </label>
+            <input type="text" data-task-date-input />
+          </div>
+
+          <div class="new-task-line">
+            <label>Priority: </label>
+            <input type="text" data-task-priority-input />
+          </div>
+          <hr />
+          <button data-new-task-btn>Add Task</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

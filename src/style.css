@@ -1,0 +1,134 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* CSS Reset above, Custom Code below */
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+.main-container {
+  height: 90%;
+  display: grid;
+  grid-template: 175px 1fr / 300px 600px;
+  grid-template-areas:
+    "header header"
+    "sidebar content";
+  max-width: 1000px;
+  border: solid 1px black;
+  overflow: scroll;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(209, 201, 191);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  border-right: solid 1px black;
+  padding: 1rem;
+}
+
+.content {
+  grid-area: content;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+hr {
+  margin-block: 1rem;
+}
+
+.new-task-form {
+  width: 350px;
+  border: solid 1px black;
+  align-self: center;
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+.new-task-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-inline: 1rem;
+}
+
+h3 {
+  margin-top: 1rem;
+}
+
+.project-item {
+  border: solid 1px black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.25rem;
+}
+
+.project-link:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
