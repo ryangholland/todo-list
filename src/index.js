@@ -45,9 +45,23 @@ const dataController = (() => {
     console.log(projects);
   };
 
+  const deleteProject = (id) => {
+    if (projects.length === 1) return;
+    projects = projects.filter((project) => project.id != id);
+    if (!projects.includes(activeProject)) activeProject = projects[0];
+    console.log(projects);
+    displayController.renderAll();
+  };
+
   loadProjects();
 
-  return { getProjects, getActiveProject, createProject, createTask };
+  return {
+    getProjects,
+    getActiveProject,
+    createProject,
+    createTask,
+    deleteProject,
+  };
 })();
 
 const inputController = (() => {
@@ -85,6 +99,15 @@ const inputController = (() => {
     taskPriorityInput.value = "";
     displayController.renderTasks();
   });
+
+  const initDeleteBtn = (btn) => {
+    btn.addEventListener("click", (e) => {
+      dataController.deleteProject(e.target.dataset.projectId);
+    });
+    
+  };
+
+  return { initDeleteBtn };
 })();
 
 const displayController = (() => {
@@ -100,7 +123,17 @@ const displayController = (() => {
     clearElement(projectListDiv);
     projects.forEach((project) => {
       let newDiv = document.createElement("div");
-      newDiv.textContent = project.title;
+      let titleDiv = document.createElement("div");
+      let deleteBtn = document.createElement("button");
+
+      titleDiv.textContent = project.title;
+      deleteBtn.textContent = "X";
+      deleteBtn.dataset.projectId = project.id;
+      inputController.initDeleteBtn(deleteBtn);
+
+      newDiv.append(titleDiv);
+      newDiv.append(deleteBtn);
+
       projectListDiv.append(newDiv);
     });
   };
@@ -125,9 +158,13 @@ const displayController = (() => {
     });
   };
 
-  renderProjectList();
-  renderActiveProject();
-  renderTasks();
+  const renderAll = () => {
+    renderProjectList();
+    renderActiveProject();
+    renderTasks();
+  };
 
-  return { renderProjectList, renderActiveProject, renderTasks };
+  renderAll();
+
+  return { renderProjectList, renderActiveProject, renderTasks, renderAll };
 })();
