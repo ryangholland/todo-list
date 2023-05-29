@@ -1,37 +1,13 @@
 const Task = (title, description, dueDate, priority) => {
   let completed = false;
 
-  const completeTask = () => {
-    completed = !completed;
-  };
-
-  const displayProps = () => {
-    console.log({ title, description, dueDate, priority, completed });
-  };
-
-  return { displayProps, completeTask };
+  return { title, description, dueDate, priority, completed };
 };
 
 const Project = (title) => {
   let tasks = [];
 
-  const addTask = (task) => {
-    tasks.push(task);
-  };
-
-  const displayTasks = () => {
-    tasks.forEach((task) => {
-      task.displayProps();
-    });
-  };
-
-  return {
-    addTask,
-    displayTasks,
-    get name() {
-      return title;
-    },
-  };
+  return { title, tasks };
 };
 
 const dataController = (() => {
@@ -39,21 +15,35 @@ const dataController = (() => {
   let activeProject = null;
 
   const getProjects = () => projects;
+  const getActiveProject = () => activeProject;
 
   const createProject = (title) => {
     let newProject = Project(title);
     projects.push(newProject);
   };
 
+  const setActiveProject = (project) => {
+    activeProject = project;
+  };
+
+  const createTask = (title, description, dueDate, priority) => {
+    let newTask = Task(title, description, dueDate, priority)
+    activeProject.tasks.push(newTask);
+  }
+
   const loadProjects = () => {
     // Get projects from LOCALSTORAGE if available; if not, create a default project
 
-    createProject("Default Project")
+    createProject("Default Project");
+    setActiveProject(projects[0]);
+    createTask("Task One", "The first task", "Tomorrow", "High");
+    createTask("Task Two", "Another task", "Next Week", "Medium");
+    console.log(projects)
   };
 
   loadProjects();
 
-  return { getProjects, createProject };
+  return { getProjects, getActiveProject, createProject };
 })();
 
 const inputController = (() => {
@@ -64,7 +54,7 @@ const inputController = (() => {
     if (addProjectInput.value === "") return;
     dataController.createProject(addProjectInput.value);
     addProjectInput.value = "";
-    displayController.renderProjects();
+    displayController.renderProjectList();
   });
 })();
 
@@ -75,18 +65,27 @@ const displayController = (() => {
     }
   };
 
-  const renderProjects = () => {
+  const renderProjectList = () => {
     const projectListDiv = document.getElementById("project-list");
     let projects = dataController.getProjects();
     clearElement(projectListDiv);
     projects.forEach((project) => {
       let newDiv = document.createElement("div");
-      newDiv.textContent = project.name;
+      newDiv.textContent = project.title;
       projectListDiv.append(newDiv);
     });
   };
 
-  renderProjects();
-  
-  return { renderProjects };
+  const renderActiveProject = () => {
+    const activeProject = dataController.getActiveProject();
+    const activeProjectSpan = document.querySelector(
+      "[data-active-project-title]"
+    );
+    activeProjectSpan.textContent = activeProject.title;
+  };
+
+  renderProjectList();
+  renderActiveProject();
+
+  return { renderProjectList, renderActiveProject };
 })();
