@@ -25,11 +25,20 @@ const Project = (title) => {
     });
   };
 
-  return { addTask, displayTasks };
+  return {
+    addTask,
+    displayTasks,
+    get name() {
+      return title;
+    },
+  };
 };
 
 const dataController = (() => {
-  const projects = [];
+  let projects = [];
+  let activeProject = null;
+
+  const getProjects = () => projects;
 
   const createProject = (title) => {
     let newProject = Project(title);
@@ -39,19 +48,45 @@ const dataController = (() => {
   const loadProjects = () => {
     // Get projects from LOCALSTORAGE if available; if not, create a default project
 
-    let defaultTask = Task("Default Task", "A default task.", "Tomorrow", "High");
-    let defaultProject = Project("Default Project");
-    defaultProject.addTask(defaultTask);
-    defaultProject.displayTasks();
-  }
+    createProject("Default Project")
+  };
 
   loadProjects();
 
-  return { createProject };
+  return { getProjects, createProject };
 })();
 
-const inputController = (() => {})();
+const inputController = (() => {
+  const addProjectInput = document.querySelector("[data-new-project-input]");
+  const addProjectBtn = document.querySelector("[data-new-project-btn]");
 
-const displayController = (() => {})();
+  addProjectBtn.addEventListener("click", () => {
+    if (addProjectInput.value === "") return;
+    dataController.createProject(addProjectInput.value);
+    addProjectInput.value = "";
+    displayController.renderProjects();
+  });
+})();
 
+const displayController = (() => {
+  const clearElement = (element) => {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  };
 
+  const renderProjects = () => {
+    const projectListDiv = document.getElementById("project-list");
+    let projects = dataController.getProjects();
+    clearElement(projectListDiv);
+    projects.forEach((project) => {
+      let newDiv = document.createElement("div");
+      newDiv.textContent = project.name;
+      projectListDiv.append(newDiv);
+    });
+  };
+
+  renderProjects();
+  
+  return { renderProjects };
+})();
