@@ -1,13 +1,17 @@
+import uniqid from "uniqid";
+
 const Task = (title, description, dueDate, priority) => {
+  let id = uniqid();
   let completed = false;
 
-  return { title, description, dueDate, priority, completed };
+  return { title, id, description, dueDate, priority, completed };
 };
 
 const Project = (title) => {
+  let id = uniqid();
   let tasks = [];
 
-  return { title, tasks };
+  return { title, id, tasks };
 };
 
 const dataController = (() => {
@@ -27,9 +31,9 @@ const dataController = (() => {
   };
 
   const createTask = (title, description, dueDate, priority) => {
-    let newTask = Task(title, description, dueDate, priority)
+    let newTask = Task(title, description, dueDate, priority);
     activeProject.tasks.push(newTask);
-  }
+  };
 
   const loadProjects = () => {
     // Get projects from LOCALSTORAGE if available; if not, create a default project
@@ -38,7 +42,7 @@ const dataController = (() => {
     setActiveProject(projects[0]);
     createTask("Task One", "The first task", "Tomorrow", "High");
     createTask("Task Two", "Another task", "Next Week", "Medium");
-    console.log(projects)
+    console.log(projects);
   };
 
   loadProjects();
