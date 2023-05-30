@@ -101,13 +101,11 @@ const inputController = (() => {
     displayController.renderTasks();
   });
 
-  const initDeleteBtn = (btn) => {
-    btn.addEventListener("click", (e) => {
-      dataController.deleteProject(e.target.dataset.projectId);
-    });
-  };
-
-  return { initDeleteBtn };
+  document.addEventListener("click", (e) => {
+    // Delete Project Buttons
+    if (e.target.dataset.deleteProjectId)
+      dataController.deleteProject(e.target.dataset.deleteProjectId);
+  });
 })();
 
 const displayController = (() => {
@@ -128,11 +126,10 @@ const displayController = (() => {
 
       titleDiv.textContent = project.title;
       deleteBtn.textContent = "X";
-      deleteBtn.dataset.projectId = project.id;
-      inputController.initDeleteBtn(deleteBtn);
+      deleteBtn.dataset.deleteProjectId = project.id;
 
       titleDiv.classList.add("project-link");
-      newDiv.classList.add("project-item")
+      newDiv.classList.add("project-item");
 
       newDiv.append(titleDiv);
       newDiv.append(deleteBtn);
