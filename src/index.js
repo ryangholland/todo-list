@@ -50,8 +50,13 @@ const dataController = (() => {
     if (projects.length === 1) return;
     projects = projects.filter((project) => project.id != id);
     if (!projects.includes(activeProject)) activeProject = projects[0];
-    console.log(projects);
     displayController.renderAll();
+  };
+
+  const deleteTask = (id) => {
+    let activeTasks = activeProject.tasks;
+    activeProject.tasks = activeTasks.filter((task) => task.id != id);
+    displayController.renderTasks();
   };
 
   loadProjects();
@@ -62,6 +67,7 @@ const dataController = (() => {
     createProject,
     createTask,
     deleteProject,
+    deleteTask,
   };
 })();
 
@@ -105,6 +111,10 @@ const inputController = (() => {
     // Delete Project Buttons
     if (e.target.dataset.deleteProjectId)
       dataController.deleteProject(e.target.dataset.deleteProjectId);
+
+    // Delete Task Buttons
+    if (e.target.dataset.deleteTaskId)
+      dataController.deleteTask(e.target.dataset.deleteTaskId);
   });
 })();
 
@@ -157,14 +167,15 @@ const displayController = (() => {
       let expandBtn = document.createElement("button");
       let titleDiv = document.createElement("div");
       let deleteBtn = document.createElement("button");
+      deleteBtn.dataset.deleteTaskId = task.id;
 
-      expandBtn.textContent = "..."
+      expandBtn.textContent = "...";
       titleDiv.textContent = task.title;
       deleteBtn.textContent = "X";
 
       newDiv.append(expandBtn);
       newDiv.append(titleDiv);
-      newDiv.append(deleteBtn)
+      newDiv.append(deleteBtn);
 
       taskListDiv.append(newDiv);
     });
