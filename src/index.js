@@ -27,8 +27,11 @@ const dataController = (() => {
     projects.push(newProject);
   };
 
-  const setActiveProject = (project) => {
-    activeProject = project;
+  const setActiveProject = (id) => {
+    projects.forEach((project) => {
+      if (project.id === id) activeProject = project;
+    });
+    displayController.renderAll();
   };
 
   const createTask = (title, description, dueDate, priority) => {
@@ -40,7 +43,7 @@ const dataController = (() => {
     // Get projects from LOCALSTORAGE if available; if not, create a default project
 
     createProject("Default Project");
-    setActiveProject(projects[0]);
+    activeProject = projects[0];
     createTask("Task One", "The first task", "Tomorrow", "High");
     createTask("Task Two", "Another task", "Next Week", "Medium");
     console.log(projects);
@@ -65,6 +68,7 @@ const dataController = (() => {
     getProjects,
     getActiveProject,
     createProject,
+    setActiveProject,
     createTask,
     deleteProject,
     deleteTask,
@@ -115,6 +119,11 @@ const inputController = (() => {
     // Delete Task Buttons
     if (e.target.dataset.deleteTaskId)
       dataController.deleteTask(e.target.dataset.deleteTaskId);
+
+    // Change Active Project
+    if (e.target.dataset.activeProjectId) {
+      dataController.setActiveProject(e.target.dataset.activeProjectId);
+    }
   });
 })();
 
@@ -135,6 +144,7 @@ const displayController = (() => {
       let deleteBtn = document.createElement("button");
 
       titleDiv.textContent = project.title;
+      titleDiv.dataset.activeProjectId = project.id;
       deleteBtn.textContent = "X";
       deleteBtn.dataset.deleteProjectId = project.id;
 
