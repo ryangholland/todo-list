@@ -153,7 +153,19 @@ const displayController = (() => {
     clearElement(taskListDiv);
     activeTasks.forEach((task) => {
       let newDiv = document.createElement("div");
-      newDiv.textContent = task.title;
+
+      let expandBtn = document.createElement("button");
+      let titleDiv = document.createElement("div");
+      let deleteBtn = document.createElement("button");
+
+      expandBtn.textContent = "..."
+      titleDiv.textContent = task.title;
+      deleteBtn.textContent = "X";
+
+      newDiv.append(expandBtn);
+      newDiv.append(titleDiv);
+      newDiv.append(deleteBtn)
+
       taskListDiv.append(newDiv);
     });
   };
