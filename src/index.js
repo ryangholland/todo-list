@@ -4,8 +4,9 @@ import "./style.css";
 const Task = (title, description, dueDate, priority) => {
   let id = uniqid();
   let completed = false;
+  let expanded = false;
 
-  return { title, id, description, dueDate, priority, completed };
+  return { title, id, description, dueDate, priority, completed, expanded };
 };
 
 const Project = (title) => {
@@ -46,7 +47,6 @@ const dataController = (() => {
     activeProject = projects[0];
     createTask("Task One", "The first task", "Tomorrow", "High");
     createTask("Task Two", "Another task", "Next Week", "Medium");
-    console.log(projects);
   };
 
   const deleteProject = (id) => {
@@ -137,7 +137,12 @@ const inputController = (() => {
 
     // Expand Task Buttons
     if (e.target.dataset.expandTaskId) {
-      displayController.expandTask(e.target.parentNode.parentNode);
+      let taskDiv = e.target.parentNode.parentNode;
+      if (taskDiv.childElementCount === 1) {
+        displayController.expandTask(taskDiv);
+      } else {
+        displayController.collapseTask(taskDiv);
+      }
     }
   });
 })();
@@ -209,6 +214,8 @@ const displayController = (() => {
       newDiv.append(headlineDiv);
 
       taskListDiv.append(newDiv);
+
+      if (task.expanded) expandTask(newDiv);
     });
   };
 
@@ -220,7 +227,7 @@ const displayController = (() => {
 
   const expandTask = (div) => {
     let taskDetails = dataController.getTaskDetails(div.dataset.taskDivId);
-    console.log(taskDetails);
+    taskDetails.expanded = true;
 
     const detailsBr = document.createElement("br");
     const descriptionDiv = document.createElement("div");
@@ -236,6 +243,13 @@ const displayController = (() => {
     div.append(priorityDiv);
   };
 
+  const collapseTask = (div) => {
+    let taskDetails = dataController.getTaskDetails(div.dataset.taskDivId);
+    taskDetails.expanded = false;
+    clearElement(div);
+    renderTasks();
+  };
+
   renderAll();
 
   return {
@@ -244,5 +258,6 @@ const displayController = (() => {
     renderTasks,
     renderAll,
     expandTask,
+    collapseTask,
   };
 })();
