@@ -62,6 +62,15 @@ const dataController = (() => {
     displayController.renderTasks();
   };
 
+  const getTaskDetails = (id) => {
+    let tasks = activeProject.tasks;
+    let taskDetails = [];
+    tasks.forEach((task) => {
+      if (task.id === id) taskDetails = task;
+    });
+    return taskDetails;
+  };
+
   loadProjects();
 
   return {
@@ -72,6 +81,7 @@ const dataController = (() => {
     createTask,
     deleteProject,
     deleteTask,
+    getTaskDetails,
   };
 })();
 
@@ -124,6 +134,11 @@ const inputController = (() => {
     if (e.target.dataset.activeProjectId) {
       dataController.setActiveProject(e.target.dataset.activeProjectId);
     }
+
+    // Expand Task Buttons
+    if (e.target.dataset.expandTaskId) {
+      displayController.expandTask(e.target.parentNode.parentNode);
+    }
   });
 })();
 
@@ -173,19 +188,25 @@ const displayController = (() => {
     clearElement(taskListDiv);
     activeTasks.forEach((task) => {
       let newDiv = document.createElement("div");
+      newDiv.dataset.taskDivId = task.id;
+
+      let headlineDiv = document.createElement("div");
+      headlineDiv.classList.add("headline");
 
       let expandBtn = document.createElement("button");
       let titleDiv = document.createElement("div");
       let deleteBtn = document.createElement("button");
+      expandBtn.dataset.expandTaskId = task.id;
       deleteBtn.dataset.deleteTaskId = task.id;
 
       expandBtn.textContent = "...";
       titleDiv.textContent = task.title;
       deleteBtn.textContent = "X";
 
-      newDiv.append(expandBtn);
-      newDiv.append(titleDiv);
-      newDiv.append(deleteBtn);
+      headlineDiv.append(expandBtn);
+      headlineDiv.append(titleDiv);
+      headlineDiv.append(deleteBtn);
+      newDiv.append(headlineDiv);
 
       taskListDiv.append(newDiv);
     });
@@ -197,7 +218,31 @@ const displayController = (() => {
     renderTasks();
   };
 
+  const expandTask = (div) => {
+    let taskDetails = dataController.getTaskDetails(div.dataset.taskDivId);
+    console.log(taskDetails);
+
+    const detailsBr = document.createElement("br");
+    const descriptionDiv = document.createElement("div");
+    descriptionDiv.textContent = `Description: ${taskDetails.description}`;
+    const dueDateDiv = document.createElement("div");
+    dueDateDiv.textContent = `Due Date: ${taskDetails.dueDate}`;
+    const priorityDiv = document.createElement("div");
+    priorityDiv.textContent = `Priority: ${taskDetails.priority}`;
+
+    div.append(detailsBr);
+    div.append(descriptionDiv);
+    div.append(dueDateDiv);
+    div.append(priorityDiv);
+  };
+
   renderAll();
 
-  return { renderProjectList, renderActiveProject, renderTasks, renderAll };
+  return {
+    renderProjectList,
+    renderActiveProject,
+    renderTasks,
+    renderAll,
+    expandTask,
+  };
 })();
