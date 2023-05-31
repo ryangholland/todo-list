@@ -26,6 +26,7 @@ const dataController = (() => {
   const createProject = (title) => {
     let newProject = Project(title);
     projects.push(newProject);
+    saveData();
   };
 
   const setActiveProject = (id) => {
@@ -38,15 +39,20 @@ const dataController = (() => {
   const createTask = (title, description, dueDate, priority) => {
     let newTask = Task(title, description, dueDate, priority);
     activeProject.tasks.push(newTask);
+    saveData();
   };
 
   const loadProjects = () => {
     // Get projects from LOCALSTORAGE if available; if not, create a default project
-
-    createProject("Default Project");
-    activeProject = projects[0];
-    createTask("Task One", "The first task", "Tomorrow", "High");
-    createTask("Task Two", "Another task", "Next Week", "Medium");
+    if (localStorage.getItem("projectData")) {
+      projects = JSON.parse(localStorage.getItem("projectData"));
+      activeProject = projects[0];
+    } else {
+      createProject("Default Project");
+      activeProject = projects[0];
+      createTask("Task One", "The first task", "Tomorrow", "High");
+      createTask("Task Two", "Another task", "Next Week", "Medium");
+    }
   };
 
   const deleteProject = (id) => {
@@ -54,12 +60,14 @@ const dataController = (() => {
     projects = projects.filter((project) => project.id != id);
     if (!projects.includes(activeProject)) activeProject = projects[0];
     displayController.renderAll();
+    saveData();
   };
 
   const deleteTask = (id) => {
     let activeTasks = activeProject.tasks;
     activeProject.tasks = activeTasks.filter((task) => task.id != id);
     displayController.renderTasks();
+    saveData();
   };
 
   const getTaskDetails = (id) => {
@@ -69,6 +77,10 @@ const dataController = (() => {
       if (task.id === id) taskDetails = task;
     });
     return taskDetails;
+  };
+
+  const saveData = () => {
+    localStorage.setItem("projectData", JSON.stringify(projects));
   };
 
   loadProjects();
