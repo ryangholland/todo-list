@@ -41,8 +41,13 @@
           </div>
 
           <div class="new-task-line">
-            <label>Priority: </label>
-            <input type="text" data-task-priority-input />
+            <label for="prio">Priority: </label>
+            <!-- <input type="text" data-task-priority-input /> -->
+            <select name="prio" id="prio" data-task-priority-select>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
           </div>
           <hr />
           <button data-new-task-btn>Add Task</button>
