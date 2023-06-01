@@ -1,20 +1,6 @@
-import uniqid from "uniqid";
 import "./style.css";
-
-const Task = (title, description, dueDate, priority) => {
-  let id = uniqid();
-  let completed = false;
-  let expanded = false;
-
-  return { title, id, description, dueDate, priority, completed, expanded };
-};
-
-const Project = (title) => {
-  let id = uniqid();
-  let tasks = [];
-
-  return { title, id, tasks };
-};
+import { Task } from "./task";
+import { Project } from "./project";
 
 const dataController = (() => {
   let projects = [];
