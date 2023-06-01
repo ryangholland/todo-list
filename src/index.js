@@ -106,8 +106,8 @@ const inputController = (() => {
     "[data-task-description-input]"
   );
   const taskDateInput = document.querySelector("[data-task-date-input]");
-  const taskPriorityInput = document.querySelector(
-    "[data-task-priority-input]"
+  const taskPrioritySelect = document.querySelector(
+    "[data-task-priority-select]"
   );
   const addTaskBtn = document.querySelector("[data-new-task-btn]");
 
@@ -124,12 +124,12 @@ const inputController = (() => {
       taskTitleInput.value,
       taskDescriptionInput.value,
       taskDateInput.value,
-      taskPriorityInput.value
+      taskPrioritySelect.value
     );
     taskTitleInput.value = "";
     taskDescriptionInput.value = "";
     taskDateInput.value = "";
-    taskPriorityInput.value = "";
+    taskPrioritySelect.value = "Low";
     displayController.renderTasks();
   });
 
